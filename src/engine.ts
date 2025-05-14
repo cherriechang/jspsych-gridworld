@@ -1,27 +1,14 @@
-import { GridEngineHeadless, ArrayTilemap, Direction } from "grid-engine";
-import type { GridEngineConfigHeadless } from "grid-engine";
+import { GridEngineHeadless, ArrayTilemap } from "grid-engine";
 
-const START_POSITION = { x: 0, y: 0 };
-
-export function createGridEngine(GRID_ROWS: number, GRID_COLS: number) {
+//, walls: Array<[number, number]> = []
+export function createGridEngine(rows: number, cols: number) {
   const gridEngine = new GridEngineHeadless();
-  const gridTilemap: ArrayTilemap = new ArrayTilemap({
+  const tilemap = new ArrayTilemap({
     gridworld: {
-      data: Array.from({ length: GRID_ROWS }, () => Array(GRID_COLS).fill(0)),
+      // change this to fill 1 if wall
+      data: Array.from({ length: rows }, () => Array(cols).fill(0)),
     },
   });
-  const gridConfig: GridEngineConfigHeadless = {
-    characters: [
-      {
-        id: "player",
-        startPosition: START_POSITION,
-        facingDirection: Direction.UP,
-        speed: 25,
-      },
-    ],
-  };
 
-  gridEngine.create(gridTilemap, gridConfig);
-
-  return gridEngine;
+  return { gridEngine, tilemap };
 }
