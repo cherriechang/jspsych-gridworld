@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// THIS IS DEPRECATED
+import { useState, useEffect } from 'react';
 
 const GRID_ROWS = 5;
 const GRID_COLS = 5;
