@@ -20,6 +20,10 @@ export default function GridWorld() {
     game.onMove(setAgentPosition);
 
     const handleKey = (e: KeyboardEvent) => {
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        e.preventDefault();
+      }
+  
       const keyMap: Record<string, Direction> = {
         ArrowUp: Direction.UP,
         ArrowDown: Direction.DOWN,

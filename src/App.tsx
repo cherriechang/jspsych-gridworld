@@ -1,8 +1,9 @@
 import GridWorld from "./GridWorld";
+import "./App.css";
 
 function App() {
   return (
-    <div className="App">
+    <div className="app-wrapper">
       <h1>GridWorld Demo</h1>
       <GridWorld />
     </div>
