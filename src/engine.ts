@@ -1,11 +1,9 @@
 import { GridEngineHeadless, ArrayTilemap, Direction } from "grid-engine";
 import type { GridEngineConfigHeadless } from "grid-engine";
 
-const GRID_ROWS = 5;
-const GRID_COLS = 5;
-const TILE_SIZE = 80;
+const START_POSITION = { x: 0, y: 0 };
 
-export function createGridEngine() {
+export function createGridEngine(GRID_ROWS: number, GRID_COLS: number) {
   const gridEngine = new GridEngineHeadless();
   const gridTilemap: ArrayTilemap = new ArrayTilemap({
     gridworld: {
@@ -16,7 +14,7 @@ export function createGridEngine() {
     characters: [
       {
         id: "player",
-        startPosition: { x: 0, y: 0 },
+        startPosition: START_POSITION,
         facingDirection: Direction.UP,
         speed: 25
       },

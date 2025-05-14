@@ -4,16 +4,17 @@ import { Direction } from "grid-engine";
 
 const GRID_ROWS = 5;
 const GRID_COLS = 5;
+const START_POSITION = { x: 0, y: 0 };
 const TILE_SIZE = 80;
 
 export default function GridWorld() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState(START_POSITION);
   const gridEngineRef = useRef<ReturnType<typeof createGridEngine> | null>(
     null
   );
 
 useEffect(() => {
-  const gridEngine = createGridEngine();
+  const gridEngine = createGridEngine(GRID_ROWS, GRID_COLS);
   gridEngineRef.current = gridEngine;
 
   const updatePos = () => {
