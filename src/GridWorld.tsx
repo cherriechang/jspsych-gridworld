@@ -1,75 +1,68 @@
 import { useEffect, useRef, useState } from "react";
-import { createGridEngine } from "./engine";
+import { GameState, type Position } from "./GameState";
 import { Direction } from "grid-engine";
 import GridRenderer from "./GridRenderer";
 
 const GRID_ROWS = 5;
 const GRID_COLS = 5;
 const TILE_SIZE = 80;
-const START_POSITION = { x: 0, y: 0 };
+const START_POS = { x: 0, y: 0 };
 
 export default function GridWorld() {
-  const [position, setPosition] = useState(START_POSITION);
-  const gridEngineRef = useRef<ReturnType<typeof createGridEngine> | null>(
-    null
-  );
+  const [agentPosition, setAgentPosition] = useState<Position>(START_POS);
+  const gameStateRef = useRef<GameState | null>(null);
 
   useEffect(() => {
-    const gridEngine = createGridEngine(GRID_ROWS, GRID_COLS);
-    gridEngineRef.current = gridEngine;
+    const game = new GameState({
+      rows: GRID_ROWS,
+      cols: GRID_COLS,
+      walls: [
+        { x: 1, y: 1 },
+        { x: 2, y: 2 },
+      ],
+      goal: { x: 4, y: 4 },
+    });
 
-    const updatePos = () => {
-      const pos = gridEngine.getPosition("player");
-      setPosition(pos);
+    gameStateRef.current = game;
+    setAgentPosition(game.getPosition());
+
+    game.onMove(setAgentPosition);
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (!gameStateRef.current) return;
+      const keyMap: Record<string, Direction> = {
+        ArrowUp: Direction.UP,
+        ArrowDown: Direction.DOWN,
+        ArrowLeft: Direction.LEFT,
+        ArrowRight: Direction.RIGHT,
+      };
+      const dir = keyMap[e.key];
+      if (dir) gameStateRef.current.move(dir);
     };
 
-    gridEngine.positionChangeFinished().subscribe(() => updatePos());
-    updatePos(); // initial position update
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const ge = gridEngineRef.current;
-      if (!ge) return;
-
-      switch (e.key) {
-        case "ArrowUp":
-          ge.move("player", Direction.UP);
-          break;
-        case "ArrowDown":
-          ge.move("player", Direction.DOWN);
-          break;
-        case "ArrowLeft":
-          ge.move("player", Direction.LEFT);
-          break;
-        case "ArrowRight":
-          ge.move("player", Direction.RIGHT);
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKey);
 
     let lastTime = performance.now();
-    let animationFrameId: number;
-    const tick = (time: number) => {
+    const loop = (time: number) => {
       const delta = time - lastTime;
       lastTime = time;
-      gridEngine.update(time, delta);
-      animationFrameId = requestAnimationFrame(tick);
+      game.update(time, delta);
+      requestAnimationFrame(loop);
     };
-    animationFrameId = requestAnimationFrame(tick);
+    requestAnimationFrame(loop);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("keydown", handleKey);
     };
   }, []);
 
+  if (!gameStateRef.current) return null;
+
   return (
     <GridRenderer
-      rows={GRID_ROWS}
-      cols={GRID_COLS}
+      gameState={gameStateRef.current}
+      agentPosition={agentPosition}
       tileSize={TILE_SIZE}
-      agentPosition={position}
     />
   );
 }

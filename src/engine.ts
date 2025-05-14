@@ -16,7 +16,7 @@ export function createGridEngine(GRID_ROWS: number, GRID_COLS: number) {
         id: "player",
         startPosition: START_POSITION,
         facingDirection: Direction.UP,
-        speed: 25
+        speed: 25,
       },
     ],
   };

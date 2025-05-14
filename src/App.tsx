@@ -1,4 +1,4 @@
-import GridWorld from './GridWorld';
+import GridWorld from "./GridWorld";
 
 function App() {
   return (
@@ -10,4 +10,3 @@ function App() {
 }
 
 export default App;
-
