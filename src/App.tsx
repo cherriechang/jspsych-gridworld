@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   return (
     <div className="app-wrapper">
-      <h1>GridWorld Demo</h1>
+      <h1>gridworld demo</h1>
       <GridWorld />
     </div>
   );

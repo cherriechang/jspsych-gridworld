@@ -21,7 +21,7 @@ export default function GridWorld() {
 
     const handleKey = (e: KeyboardEvent) => {
       if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-        e.preventDefault();
+        e.preventDefault(); // Prevent scrolling
       }
   
       const keyMap: Record<string, Direction> = {
