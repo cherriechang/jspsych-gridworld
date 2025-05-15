@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "ajv": "^8.17.1",
+    "fs": "^0.0.1-security",
     "grid-engine": "^2.48.0",
+    "js-yaml": "^4.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

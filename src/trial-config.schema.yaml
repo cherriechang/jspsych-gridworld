@@ -22,14 +22,14 @@ properties:
           type: integer
         minItems: 2
         maxItems: 2
-      total_steps:
+      max_steps:
         type: integer
-        default: 0
+        default: 100
 
   items:
     type: object
     patternProperties:
-      "^[A-Za-z0-9_]+$":
+      "^[A-Za-z0-9_]+$": # anything that matches this regex is a valid item name and has to validate against this section
         type: object
         required: [blocks, collects, unique, locations, visual]
         properties:
