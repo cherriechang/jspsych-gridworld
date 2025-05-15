@@ -99,13 +99,13 @@ definitions:
       - type: object
         required: [for_all]
         properties:
-          less_than:
+          for_all:
             $ref: "#/definitions/predicateArray"
 
       - type: object
         required: [for_any]
         properties:
-          less_than:
+          for_any:
             $ref: "#/definitions/predicateArray"
 
   predicate:
@@ -127,6 +127,7 @@ definitions:
     properties:
       property:
         type: string
+        description: "Path to a property whose value is expected to be an array of objects."
       condition:
         $ref: "#/definitions/condition"
 

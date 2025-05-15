@@ -1,4 +1,8 @@
-type Primitive = number | boolean | [number, number];
+type Primitive =
+  | number
+  | boolean
+  | [number, number]
+  | Array<Record<string, Primitive>>;
 
 type GameStateGetter = (property: string) => Primitive;
 
@@ -46,26 +50,18 @@ export function evaluateCondition(
       (condition.less_than.value as number)
     );
   } else if ("for_all" in condition) {
-    const arr = get(condition.for_all.property);
-    if (!Array.isArray(arr)) {
-      throw new Error(`Property ${condition.for_all.property} is not an array`);
-    }
-    return arr.every((item) =>
-      evaluateCondition(
-        condition.for_all.condition,
-        (key) => (item as any)[key]
-      )
+    const arr = get(condition.for_all.property) as Array<
+      Record<string, Primitive>
+    >;
+    return arr.every((item: Record<string, Primitive>) =>
+      evaluateCondition(condition.for_all.condition, (key) => item[key])
     );
   } else if ("for_any" in condition) {
-    const arr = get(condition.for_any.property);
-    if (!Array.isArray(arr)) {
-      throw new Error(`Property ${condition.for_any.property} is not an array`);
-    }
-    return arr.some((item) =>
-      evaluateCondition(
-        condition.for_any.condition,
-        (key) => (item as any)[key]
-      )
+    const arr = get(condition.for_any.property) as Array<
+      Record<string, Primitive>
+    >;
+    return arr.some((item: Record<string, Primitive>) =>
+      evaluateCondition(condition.for_any.condition, (key) => item[key])
     );
   } else {
     throw new Error("Unknown condition type");
