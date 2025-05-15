@@ -3,8 +3,8 @@ import { JsPsych, type JsPsychPlugin, ParameterType, type TrialType } from "jsps
 import { version } from "../package.json";
 import React from "react";
 import ReactDOM from "react-dom";
-import { GridWorldApp } from "/src/components/GridWorldApp";
-import { ConfigParser } from "/src/core/ConfigParser";
+import { GridWorldApp } from "./components/GridWorldApp";
+import { ConfigParser } from "./core/ConfigParser";
 
 const info = <const>{
   name: "plugin-gridworld",
