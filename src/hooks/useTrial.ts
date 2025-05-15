@@ -3,28 +3,26 @@ import type { TrialConfig, Position } from "../core/types";
 import { GameCompiler } from "../core/GameCompiler";
 import { GridWorld } from "../core/GridWorld";
 import { RuleEvaluator } from "../core/RuleEvaluator";
-import trialConfig from "../config/trial-1.yaml";
-import { validate } from "uuid";
-// import { validateConfig } from "../core/validateConfig";
-import { configParser } from "../core/ConfigParser";
+import { ConfigParser } from "../core/ConfigParser";
 
 /**
  * Runs one trial: compiles the world, listens for key events,
  * and forces React to re-render on state changes.
- * @param config Optional override of the default trial config
+ * @param config serialized trial config YAML
  */
-export function useTrial(config: TrialConfig = trialConfig) {
+export function useTrial(config: string) {
   const worldRef = useRef<GridWorld | null>(null);
   const [, setTick] = useState(0);
 
   useEffect(() => {
     // 0) TODO: validate + parse config @cherriechang
+    const trial = ConfigParser.fromObject(config);
 
 
 
     // 1) compile world
-    const world = GameCompiler.compile(config);
-    const evaluator = new RuleEvaluator(config.end_condition);
+    const world = GameCompiler.compile(trial);
+    const evaluator = new RuleEvaluator(trial.end_condition);
     worldRef.current = world;
     setTick((t) => t + 1);
 
