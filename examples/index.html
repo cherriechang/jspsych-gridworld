@@ -1,3 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>jsPsychPluginGridworld Example</title>
+    <script src="https://unpkg.com/jspsych"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Load the published plugin package here, e.g.
+<script src="https://unpkg.com/plugin-gridworld"></script>
+<script src="../dist/index.browser.js"></script> -->
+    <script src="../dist/index.browser.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych/css/jspsych.css" />
+  </head>
+
+  <body></body>
+  <script>
+    const jsPsych = initJsPsych();
+
+    const config = `
 general:
   rows: 8
   cols: 16
@@ -71,3 +90,12 @@ end_condition:
         - greater_than:
             property: player.inventory.Orange
             value: 3
+`
+    const trial = {
+      type: jsPsychGridworld,
+      configYaml: config,
+    };
+
+    jsPsych.run([trial])
+  </script>
+</html>

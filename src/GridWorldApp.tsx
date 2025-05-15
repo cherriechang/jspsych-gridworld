@@ -4,19 +4,18 @@ import { GridView } from "./components/GridView";
 import { InventoryView } from "./components/InventoryView";
 import { StepsRemainingView } from "./components/StepsRemainingView";
 import { EndConditionView } from "./components/EndConditionView";
-import {
-  trial1config,
-  trial2config,
-  trial3config,
-  trial4config,
-  trial5config,
-  trial6config,
-} from "./config/trialYaml";
 import "./index.css";
 
-export default function App() {
-  let trialConfig = trial5config;
-  const { world } = useTrial(trialConfig);
+interface GridWorldAppProps {
+  configYaml: string;
+  onFinish: (data: any) => void;
+}
+
+export default function GridWorldApp({
+  configYaml,
+  onFinish,
+}: GridWorldAppProps) {
+  const { world } = useTrial(configYaml, onFinish);
 
   if (!world) {
     return <div className="app-wrapper">Loading…</div>;
@@ -39,7 +38,7 @@ export default function App() {
         </div>
 
         <div className="sidebar-right">
-          <EndConditionView rawConfig={trialConfig} world={world} />
+          <EndConditionView rawConfig={configYaml} world={world} />
         </div>
       </div>
     </div>

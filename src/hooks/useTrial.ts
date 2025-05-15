@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import type { TrialConfig, Position } from "../core/types";
+import type { Position } from "../core/types";
 import { GameCompiler } from "../core/GameCompiler";
 import { GridWorld } from "../core/GridWorld";
 import { RuleEvaluator } from "../core/RuleEvaluator";
 import { ConfigParser } from "../core/ConfigParser";
-import { trialSchemaYaml } from "../config/trialSchema";
+import { trialSchemaYaml } from "../utils/trialSchema";
 
 /**
  * Runs one trial: compiles the world, listens for key events,
  * and forces React to re-render on state changes.
  * @param config serialized trial config YAML
  */
-export function useTrial(config: string) {
+export function useTrial(config: string, onFinish: (data: any) => void) {
   const worldRef = useRef<GridWorld | null>(null);
   const [, setTick] = useState(0);
 
@@ -55,8 +55,7 @@ export function useTrial(config: string) {
       // check end condition
       if (evaluator.evaluate(world)) {
         console.log("End condition met!");
-        alert('trial done! 🎉(?)')
-        // e.g. jsPsych.finishTrial({ inventory: world.agent.inventory.snapshot() });
+        onFinish(world.agent.inventory); // TODO: make this legit
       }
     };
 
