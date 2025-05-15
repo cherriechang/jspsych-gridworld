@@ -22,7 +22,7 @@ export class GameCompiler {
     for (const cat of categories) {
       const locs = config.items[cat.def.name].locations;
       for (const key of Object.keys(locs)) {
-        const [x, y] = key.slice(1, -1).split(",").map(Number) as [number, number];
+        const [x, y] = key.split(",").map(Number) as [number, number];
         const count = cat.def.unique ? 1 : locs[key]; // TODO: error msg for unique items with locs[key] > 1
         for (let i = 0; i < count; i++) {
           instances.push(new ItemInstance(cat, { x, y }));

@@ -55,6 +55,7 @@ export function useTrial(config: string) {
       // check end condition
       if (evaluator.evaluate(world)) {
         console.log("End condition met!");
+        alert('Yay! 🎉')
         // e.g. jsPsych.finishTrial({ inventory: world.agent.inventory.snapshot() });
       }
     };

@@ -29,6 +29,8 @@ export class ConfigParser {
       console.error("❌ Config is invalid:");
       console.error(validate.errors);
       throw new Error("Invalid configuration file.");
+
+      // TODO: @cherriechang trial4config does not work (forall)
     }
   }
 
