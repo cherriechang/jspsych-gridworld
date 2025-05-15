@@ -1,0 +1,134 @@
+export const trialSchemaYaml = `\
+$schema: "http://json-schema.org/draft-07/schema#"
+title: Trial Config Schema
+type: object
+required:
+  - general
+  - items
+  - end_condition
+properties:
+  general:
+    type: object
+    required: [rows, cols, start_location]
+    properties:
+      rows:
+        type: integer
+        minimum: 1
+      cols:
+        type: integer
+        minimum: 1
+      start_location:
+        type: array
+        items:
+          type: integer
+        minItems: 2
+        maxItems: 2
+      max_steps:
+        type: integer
+        default: 100
+
+  items:
+    type: object
+    patternProperties:
+      "^[A-Za-z0-9_]+$": # anything that matches this regex is a valid item name and has to validate against this section
+        type: object
+        required: [blocks, collects, unique, locations, visual]
+        properties:
+          blocks:
+            type: boolean
+          collects:
+            type: boolean
+          unique:
+            type: boolean
+          locations:
+            type: object
+            patternProperties:
+              "^\\\\[[0-9]+,[0-9]+\\\\]$":
+                type: integer
+          visual:
+            type: object
+            properties:
+              color:
+                type: string
+
+  end_condition:
+    $ref: "#/definitions/condition"
+
+definitions:
+  condition:
+    oneOf:
+      - type: object
+        required: [and]
+        properties:
+          and:
+            type: array
+            items:
+              $ref: "#/definitions/condition"
+
+      - type: object
+        required: [or]
+        properties:
+          or:
+            type: array
+            items:
+              $ref: "#/definitions/condition"
+
+      - type: object
+        required: [not]
+        properties:
+          not:
+            $ref: "#/definitions/condition"
+
+      - type: object
+        required: [equals]
+        properties:
+          equals:
+            $ref: "#/definitions/predicate"
+
+      - type: object
+        required: [greater_than]
+        properties:
+          greater_than:
+            $ref: "#/definitions/predicate"
+
+      - type: object
+        required: [less_than]
+        properties:
+          less_than:
+            $ref: "#/definitions/predicate"
+
+      - type: object
+        required: [for_all]
+        properties:
+          for_all:
+            $ref: "#/definitions/predicateArray"
+
+      - type: object
+        required: [for_any]
+        properties:
+          for_any:
+            $ref: "#/definitions/predicateArray"
+
+  predicate:
+    type: object
+    required: [property, value]
+    properties:
+      property:
+        type: string
+      value:
+        oneOf:
+          - type: integer
+          - type: boolean
+          - type: array
+            items: { type: integer }
+
+  predicateArray:
+    type: object
+    required: [property, condition]
+    properties:
+      property:
+        type: string
+        description: "Path to a property whose value is expected to be an array of objects."
+      condition:
+        $ref: "#/definitions/condition"
+`;

@@ -10,6 +10,10 @@ import { trial1config, trial2config, trial3config, trial4config } from "./config
 export default function App() {
   const { world } = useTrial(trial1config);
 
+  if (!world) {
+    return <div className="app-wrapper">Loading...</div>;
+  }
+
   return (
     <div className="app-wrapper">
       <h1>GridWorld Demo</h1>

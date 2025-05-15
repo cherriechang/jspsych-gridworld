@@ -4,6 +4,7 @@ import { GameCompiler } from "../core/GameCompiler";
 import { GridWorld } from "../core/GridWorld";
 import { RuleEvaluator } from "../core/RuleEvaluator";
 import { ConfigParser } from "../core/ConfigParser";
+import { trialSchemaYaml } from "../config/trialSchema";
 
 /**
  * Runs one trial: compiles the world, listens for key events,
@@ -15,9 +16,8 @@ export function useTrial(config: string) {
   const [, setTick] = useState(0);
 
   useEffect(() => {
-    // 0) TODO: validate + parse config @cherriechang
-    const trial = ConfigParser.fromObject(config);
-
+    const parser = new ConfigParser(config, trialSchemaYaml);
+    const trial = parser.getParsedConfig()
 
 
     // 1) compile world
