@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { TrialConfig, Position } from "../core/types";
 import { GameCompiler } from "../core/GameCompiler";
 import { GridWorld } from "../core/GridWorld";
+import { RuleEvaluator } from "../core/RuleEvaluator";
 import trialConfig from "../config/trial-1.yaml";
 
 /**
@@ -10,12 +11,15 @@ import trialConfig from "../config/trial-1.yaml";
  * @param config Optional override of the default trial config
  */
 export function useTrial(config: TrialConfig = trialConfig) {
-  const worldRef = useRef<GridWorld>();
+  const worldRef = useRef<GridWorld | null>(null);
   const [, setTick] = useState(0);
 
   useEffect(() => {
+    // 0) TODO: validate + parse config @cherriechang
+
     // 1) compile world
     const world = GameCompiler.compile(config);
+    const evaluator = new RuleEvaluator(config.end_condition);
     worldRef.current = world;
     setTick((t) => t + 1);
 
@@ -28,23 +32,27 @@ export function useTrial(config: TrialConfig = trialConfig) {
     };
 
     const handleKey = (e: KeyboardEvent) => {
-      // prevent page scrolling on arrows
-      if (e.key.startsWith("Arrow")) e.preventDefault();
-
-      if (dirs[e.key]) {
+      if (e.key.startsWith("Arrow")) {
+        e.preventDefault();
         if (world.move(dirs[e.key])) setTick((t) => t + 1);
       } else if (e.key === " ") {
-        // placeholder: collect first collectible category on tile
-        const instances =
-          world.tiles[world.agent.position.y][
-            world.agent.position.x
-          ].getInstances();
-        if (
-          instances.length &&
-          world.collect(world.instances[instances[0]].category.name)
-        ) {
-          setTick((t) => t + 1);
+        // collect first matching collectible on tile
+        const tile =
+          world.tiles[world.agent.position.y][world.agent.position.x];
+        for (let id of tile.getInstances()) {
+          const cat = world.instances[id].category.def;
+          if (cat.collects) {
+            world.collect(cat.name);
+            setTick((t) => t + 1);
+            break;
+          }
         }
+      }
+
+      // check end condition
+      if (evaluator.evaluate(world)) {
+        console.log("End condition met!");
+        // e.g. jsPsych.finishTrial({ inventory: world.agent.inventory.snapshot() });
       }
     };
 
