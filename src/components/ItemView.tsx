@@ -52,7 +52,7 @@ export function ItemView({
       {/* count in center */}
       <text
         x={cx}
-        y={cy + size * 1.2}
+        y={cy + size * 0.5}
         textAnchor="middle"
         fontSize={size * 0.8}
         fill="#000"

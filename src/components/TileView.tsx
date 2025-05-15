@@ -15,18 +15,27 @@ export function TileView({
   tileSize: number;
   instances: Record<string, ItemInstance>;
 }) {
-  // empty tile background
+  const full = tileSize;
+  const shrink = 0.8;             // 80% size
+  const innerSize = full * shrink;
+  const offset = (full - innerSize) / 2;
+  const x = tile.x * full + offset;
+  const y = tile.y * full + offset;
+  const corner = innerSize * 0.1; // e.g. 10% corner radius
+
   return (
     <>
+      {/* centered, rounded‐corner rect at 80% scale */}
       <rect
-        x={tile.x * tileSize}
-        y={tile.y * tileSize}
-        width={tileSize}
-        height={tileSize}
-        fill="#ffffff"
+        x={x}
+        y={y}
+        width={innerSize}
+        height={innerSize}
+        rx={corner}
+        ry={corner}
+        fill="#fff"
         stroke="#888"
       />
-      {/* render any item on top */}
       <ItemView tile={tile} instances={instances} tileSize={tileSize} />
     </>
   );
