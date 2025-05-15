@@ -13,18 +13,21 @@ export function GridView({
   world: GridWorld;
   tileSize: number;
 }) {
-  const { tiles, agent } = world;
-
   return (
     <svg
       width={world.cols * tileSize}
       height={world.rows * tileSize}
       style={{ background: "#eee", border: "1px solid #888" }}
     >
-      {tiles.flat().map((tile) => (
-        <TileView key={`${tile.x}-${tile.y}`} tile={tile} tileSize={tileSize} />
+      {world.tiles.flat().map((tile) => (
+        <TileView
+          key={`${tile.x}-${tile.y}`}
+          tile={tile}
+          tileSize={tileSize}
+          instances={world.instances}
+        />
       ))}
-      <AgentView position={agent.position} tileSize={tileSize} />
+      <AgentView position={world.agent.position} tileSize={tileSize} />
     </svg>
   );
 }
