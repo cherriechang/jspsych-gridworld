@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>jsPsychGridworld Simple Test</title>
+    
+    <!-- First load React and ReactDOM -->
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/scheduler@0.23.0/umd/scheduler.production.min.js"></script>
+    
+    <!-- Then load jsPsych -->
+    <script src="https://unpkg.com/jspsych@7.3.3/dist/index.browser.js"></script>
+    
+    <!-- Load our plugin last -->
+    <script src="../dist/index.browser.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" />
+    <link rel="stylesheet" href="../src/styles.css" />
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+    <div id="debug" style="margin-top: 20px; padding: 15px; border: 1px solid #ddd;"></div>
+  </body>
+  <script>
+    // Logging function
+    function debug(message) {
+      const debugElement = document.getElementById('debug');
+      const p = document.createElement('p');
+      p.textContent = message;
+      debugElement.appendChild(p);
+      console.log(message);
+    }
+    
+    // Check React availability
+    debug(`React available: ${typeof React !== 'undefined'}`);
+    debug(`ReactDOM available: ${typeof ReactDOM !== 'undefined'}`);
+    
+    // Check if our plugin is available
+    debug(`Plugin available: ${typeof jsPsychGridworld !== 'undefined'}`);
+    
+    if (typeof jsPsychGridworld !== 'undefined') {
+        console.log(jsPsychGridworld);
+      debug(`Plugin info: ${JSON.stringify(jsPsychGridworld.info)}`);
+    }
+    
+    // Simple test config
+    const simpleConfig = `
+    general:
+      rows: 3
+      cols: 3
+      start_location: [0, 0]
+      total_steps: 5
+    items:
+      GoalTile:
+        blocks: false
+        collects: true
+        locations:
+          [2, 2]: 1
+        visual:
+          color: "#00ff00"
+    end_condition:
+      or:
+        - equals:
+            property: player.inventory.GoalTile
+            value: 1
+        - equals:
+            property: player.steps_remaining
+            value: 0
+    `;
+    
+    // Initialize jsPsych with a specific target
+    const jsPsych = initJsPsych({
+      display_element: 'jspsych-target',
+      on_finish: () => {
+        debug("Experiment finished!");
+      }
+    });
+    
+    // Create and run the experiment
+    try {
+      debug("Creating timeline...");
+      
+      const timeline = [{
+        type: jsPsychGridworld,
+        trial_yaml: simpleConfig
+      }];
+      
+      debug("Running experiment...");
+      jsPsych.run(timeline);
+      
+    } catch (error) {
+      debug(`Error: ${error.message}`);
+      console.error(error);
+    }
+  </script>
+</html>
