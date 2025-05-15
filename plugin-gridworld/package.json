@@ -1,0 +1,78 @@
+{
+  "name": "plugin-gridworld",
+  "version": "0.0.1",
+  "description": "Makes 2D configurable gridworld experiment",
+  "type": "module",
+  "private": false,
+  "main": "dist/index.cjs",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "typings": "dist/index.d.ts",
+  "unpkg": "dist/index.browser.min.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "source": "src/index.ts",
+  "scripts": {
+    "dev": "vite",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
+    "tsc": "tsc",
+    "build": "rollup --config",
+    "build:watch": "npm run build -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cherriechang/jspsych-gridworld.git",
+    "directory": ""
+  },
+  "keywords": [
+    "jsPsych"
+  ],
+  "author": {
+    "name": "Justin Yang",
+    "url": ""
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cherriechang/jspsych-gridworld/issues"
+  },
+  "homepage": "/plugin-gridworld/README.md",
+  "dependencies": {
+    "jspsych": "^8.0.0",
+    "@citation-js/core": "^0.7.14",
+    "@citation-js/plugin-software-formats": "^0.6.1",
+    "@citation-js/plugin-bibtex": "^0.7.14",
+    "@citation-js/plugin-cff": "^0.6.1",
+    "ajv": "^8.17.1",
+    "fs": "^0.0.1-security",
+    "grid-engine": "^2.48.0",
+    "js-yaml": "^4.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@jspsych/config": "^3.2.2",
+    "@jspsych/test-utils": "^1.0.0",
+    "@eslint/js": "^9.25.0",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.15.18",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "tsx": "^4.19.4",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^6.3.5"
+  }
+}

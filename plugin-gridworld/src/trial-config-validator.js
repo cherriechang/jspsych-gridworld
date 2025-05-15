@@ -15,8 +15,10 @@ export function validateConfig(configFilePath, logData = false) {
     if (valid) {
       if (logData) console.log(data);
       console.log("✅ Config is valid!");
+      return true;
     } else {
       console.error("❌ Config is invalid:");
       console.error(validate.errors);
+      return false;
     }
 }
