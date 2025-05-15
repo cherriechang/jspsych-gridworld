@@ -8,6 +8,8 @@ import { ItemInstance } from "./ItemInstance";
  * The full game state: grid of Tiles, list of instances, and the Agent.
  */
 export class GridWorld {
+  public readonly rows: number;
+  public readonly cols: number;
   public tiles: Tile[][];
   public agent: Agent;
   public instances: Record<string, ItemInstance> = {};
@@ -20,6 +22,9 @@ export class GridWorld {
     /** Instances built by compiler */
     private instanceList: ItemInstance[]
   ) {
+    this.rows = config.general.rows;
+    this.cols = config.general.cols;
+
     // 1) Build empty grid
     this.tiles = Array.from({ length: config.general.rows }, (_, y) =>
       Array.from({ length: config.general.cols }, (_, x) => new Tile(x, y))
