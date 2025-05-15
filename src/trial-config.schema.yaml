@@ -96,6 +96,18 @@ definitions:
           less_than:
             $ref: "#/definitions/predicate"
 
+      - type: object
+        required: [for_all]
+        properties:
+          less_than:
+            $ref: "#/definitions/predicateArray"
+
+      - type: object
+        required: [for_any]
+        properties:
+          less_than:
+            $ref: "#/definitions/predicateArray"
+
   predicate:
     type: object
     required: [property, value]
@@ -108,3 +120,13 @@ definitions:
           - type: boolean
           - type: array
             items: { type: integer }
+
+  predicateArray:
+    type: object
+    required: [property, condition]
+    properties:
+      property:
+        type: string
+      condition:
+        $ref: "#/definitions/condition"
+
