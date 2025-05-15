@@ -9,12 +9,10 @@ export function startGridWorldTrial(
   jsPsych: JsPsych
 ) {
   const onFinish = (data: any) => {
-    // unmount the React tree
-    ReactDOM.unmountComponentAtNode(display_element);
-    // tell jsPsych the trial is done
     jsPsych.finishTrial(data);
   };
 
+  console.log(display_element);
   ReactDOM.render(
     <GridWorldApp configYaml={configYaml} onFinish={onFinish} />,
     display_element

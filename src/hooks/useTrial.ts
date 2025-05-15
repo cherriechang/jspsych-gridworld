@@ -12,10 +12,14 @@ import { trialSchemaYaml } from "../utils/trialSchema";
  * @param config serialized trial config YAML
  */
 export function useTrial(config: string, onFinish: (data: any) => void) {
+  console.log("👣 useTrial initialized");
+
   const worldRef = useRef<GridWorld | null>(null);
+  const evaluatorRef = useRef<RuleEvaluator | null>(null);
   const [, setTick] = useState(0);
 
   useEffect(() => {
+
     const parser = new ConfigParser(config, trialSchemaYaml);
     const trial = parser.getParsedConfig()
 
@@ -23,8 +27,9 @@ export function useTrial(config: string, onFinish: (data: any) => void) {
     // 1) compile world
     const world = GameCompiler.compile(trial);
     const evaluator = new RuleEvaluator(trial.end_condition);
+
     worldRef.current = world;
-    setTick((t) => t + 1);
+    evaluatorRef.current = evaluator;
 
     // 2) key handlers
     const dirs: Record<string, Position> = {
@@ -35,9 +40,19 @@ export function useTrial(config: string, onFinish: (data: any) => void) {
     };
 
     const handleKey = (e: KeyboardEvent) => {
+      if (!worldRef.current || !evaluatorRef.current) return;
+
+      const world = worldRef.current;
+      const evaluator = evaluatorRef.current;
+
       if (e.key.startsWith("Arrow")) {
         e.preventDefault();
-        if (world.move(dirs[e.key])) setTick((t) => t + 1);
+        if (world.move(dirs[e.key])) {
+          setTick((t) => {
+            console.log("🔄 Triggering re-render, tick =", t + 1);
+            return t + 1;
+          });
+        }
       } else if (e.key === " ") {
         // collect first matching collectible on tile
         const tile =
@@ -46,7 +61,11 @@ export function useTrial(config: string, onFinish: (data: any) => void) {
           const cat = world.instances[id].category.def;
           if (cat.collects) {
             world.collect(cat.name);
-            setTick((t) => t + 1);
+            setTick((t) => {
+              console.log("🔄 Triggering re-render, tick =", t + 1);
+              return t + 1;
+            });
+            
             break;
           }
         }
@@ -61,7 +80,7 @@ export function useTrial(config: string, onFinish: (data: any) => void) {
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [config]);
+  }, []);
 
-  return { world: worldRef.current! };
+  return { world: worldRef.current };
 }

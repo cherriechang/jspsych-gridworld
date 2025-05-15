@@ -15,9 +15,11 @@ export default function GridWorldApp({
   configYaml,
   onFinish,
 }: GridWorldAppProps) {
+  console.log("usetrial call in gridworldAPP");
   const { world } = useTrial(configYaml, onFinish);
 
   if (!world) {
+    console.log("loading...");
     return <div className="app-wrapper">Loading…</div>;
   }
 
