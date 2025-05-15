@@ -31,6 +31,7 @@ export class Tile {
    * @param allInstances lookup map by ID
    */
   collectOne(
+    // TODO: may not need if only one category per tile
     categoryName: string,
     allInstances: Record<string, ItemInstance>
   ): string | null {
@@ -39,7 +40,7 @@ export class Tile {
       return inst.category.name === categoryName && inst.category.collects;
     });
     if (idx === -1) return null;
-    return this.instanceIds.splice(idx, 1)[0];
+    return this.instanceIds.splice(idx, 1)[0]; // TODO: still in global lookup
   }
 
   /**

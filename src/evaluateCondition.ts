@@ -1,10 +1,10 @@
-type Primitive =
+export type Primitive =
   | number
   | boolean
   | [number, number]
   | Array<Record<string, Primitive>>;
 
-type GameStateGetter = (property: string) => Primitive;
+export type GameStateGetter = (property: string) => Primitive;
 
 type Condition =
   | { and: Condition[] }
@@ -51,8 +51,9 @@ export function evaluateCondition(
     );
   } else if ("for_all" in condition) {
     const arr = get(condition.for_all.property) as Array<
-      Record<string, Primitive>
+    Record<string, Primitive>
     >;
+    console.log(condition.for_all.condition);
     return arr.every((item: Record<string, Primitive>) =>
       evaluateCondition(condition.for_all.condition, (key) => item[key])
     );
@@ -74,3 +75,6 @@ function deepEqual(a: any, b: any): boolean {
   }
   return a === b;
 }
+
+
+

@@ -26,6 +26,7 @@ export class GridWorld {
     this.cols = config.general.cols;
 
     // 1) Build empty grid
+    // TODO: maybe clean up
     this.tiles = Array.from({ length: config.general.rows }, (_, y) =>
       Array.from({ length: config.general.cols }, (_, x) => new Tile(x, y))
     );
