@@ -1,0 +1,42 @@
+general:
+  rows: 5
+  cols: 10
+  start_location: [0, 0]
+  total_steps: 15
+
+items:
+  GoalTile:
+    blocks: false
+    collects: true
+    unique: true
+    locations:
+      [9, 4]: 1
+    visual:
+      color: "#00ff00"
+
+  Boulder:
+    blocks: true
+    collects: false
+    unique: true
+    locations:
+      [1, 1]: 1 
+      [2, 1]: 1 
+      [3, 1]: 1 
+      [5, 0]: 1 
+      [5, 1]: 1 
+      [5, 2]: 1 
+      [7, 1]: 1 
+      [7, 2]: 1 
+      [7, 3]: 1 
+      [7, 4]: 1
+    visual:
+      color: "#808080"
+
+end_condition:
+  or:
+    - equals:
+        property: player.inventory.GoalTile
+        value: 1
+    - equals:
+        property: player.steps_remaining
+        value: 0
