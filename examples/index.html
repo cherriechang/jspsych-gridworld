@@ -13,9 +13,35 @@
   <body></body>
   <script>
     const jsPsych = initJsPsych();
+    const trial1config = `
+    general:
+      rows: 5
+      cols: 10
+      start_location: [0, 0]
+      total_steps: 15
 
+    items:
+      GoalTile:
+        blocks: false
+        collects: true
+        unique: true
+        locations:
+          [9, 4]: 1
+        visual:
+          color: "#00ff00"
+
+    end_condition:
+      or:
+        - equals:
+            property: player.inventory.GoalTile
+            value: 1
+        - equals:
+            property: player.steps_remaining
+            value: 0
+    `;
     const trial = {
-      type: jsPsychPluginGridworld
+      type: jsPsychPluginGridworld,
+      trial_yaml: trial1config,
     };
 
     jsPsych.run([trial])

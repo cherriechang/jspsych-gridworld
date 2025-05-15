@@ -5,7 +5,6 @@
     "resolveJsonModule": true
   },
   "include": ["src/**/*", "App.tsx"],
-  "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }

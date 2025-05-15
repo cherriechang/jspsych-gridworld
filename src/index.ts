@@ -1,64 +1,63 @@
-import { JsPsych, type JsPsychPlugin, ParameterType, type TrialType } from "jspsych";
-
+import {
+  JsPsych,
+  type JsPsychPlugin,
+  ParameterType,
+  type TrialType
+} from "jspsych";
 import { version } from "../package.json";
 import React from "react";
-import ReactDOM from "react-dom";
-import { GridWorldApp } from "./components/GridWorldApp";
-import { ConfigParser } from "./core/ConfigParser";
+import { createRoot } from "react-dom/client";
+import GridWorldApp from "./components/GridWorldApp";
 
 const info = <const>{
   name: "plugin-gridworld",
-  version: version,
+  version,
   parameters: {
-    /** Provide a clear description of the parameter_name that could be used as documentation. We will eventually use these comments to automatically build documentation and produce metadata. */
-    parameter_name: {
-      type: ParameterType.INT, // BOOL, STRING, INT, FLOAT, FUNCTION, KEY, KEYS, SELECT, HTML_STRING, IMAGE, AUDIO, VIDEO, OBJECT, COMPLEX
-      default: undefined,
+    /** YAML string defining rows, items, and end_condition */
+    trial_yaml: {
+      type: ParameterType.STRING,
+      default: "",
+      description: "YAML config for rows, cols, items, and end_condition"
     },
-    /** Provide a clear description of the parameter_name2 that could be used as documentation. We will eventually use these comments to automatically build documentation and produce metadata. */
-    parameter_name2: {
-      type: ParameterType.IMAGE,
-      default: undefined,
+    /** Pixel size of each grid cell */
+    tile_size: {
+      type: ParameterType.INT,
+      default: 60,
+      description: "Size in pixels for each grid tile"
     },
+    /** CSS class(es) for the plugin container */
+    css_classes: {
+      type: ParameterType.STRING,
+      default: "jspsych-gridworld",
+      description: "Optional CSS class for the outer container"
+    }
   },
   data: {
-    /** Provide a clear description of the data1 that could be used as documentation. We will eventually use these comments to automatically build documentation and produce metadata. */
-    data1: {
-      type: ParameterType.INT,
-    },
-    /** Provide a clear description of the data2 that could be used as documentation. We will eventually use these comments to automatically build documentation and produce metadata. */
-    data2: {
-      type: ParameterType.STRING,
-    },
+    final_steps: { type: ParameterType.INT },
+    inventory:   { type: ParameterType.OBJECT },
+    flags:       { type: ParameterType.OBJECT }
   },
-  // When you run build on your plugin, citations will be generated here based on the information in the CITATION.cff file.
-  citations: '__CITATIONS__',
+  citations: "__CITATIONS__"
 };
 
 type Info = typeof info;
 
-/**
- * **plugin-gridworld**
- *
- * Makes 2D configurable gridworld experiment
- *
- * @author Justin Yang
- * @see {@link /plugin-gridworld/README.md}}
- */
-class GridworldPlugin implements JsPsychPlugin<Info> {
+export default class GridworldPlugin implements JsPsychPlugin<Info> {
   static info = info;
-
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    // data saving
-    var trial_data = {
-      data1: 99, // Make sure this type and name matches the information for data1 in the data object contained within the info const.
-      data2: "hello world!", // Make sure this type and name matches the information for data2 in the data object contained within the info const.
-    };
-    // end trial
-    this.jsPsych.finishTrial(trial_data);
+    // 1) Create and append container
+    const container = document.createElement("div");
+    container.className = trial.css_classes!;
+    display_element.appendChild(container);
+
+    // 2) Mount React app
+    const root = createRoot(container);
+    const app = React.createElement(GridWorldApp, {
+      rawYaml: trial.trial_yaml,
+      onFinish: (data: any) => this.jsPsych.finishTrial(data),
+    });
+    root.render(app);
   }
 }
-
-export default GridworldPlugin;

@@ -11,7 +11,7 @@ import { trialSchemaYaml } from "../config/trialSchema";
  * and forces React to re-render on state changes.
  * @param config serialized trial config YAML
  */
-export function useTrial(config: string) {
+export function useTrial(config: string, onFinish: (data: any) => void) {
   const worldRef = useRef<GridWorld | null>(null);
   const [, setTick] = useState(0);
 
@@ -56,6 +56,9 @@ export function useTrial(config: string) {
       if (evaluator.evaluate(world)) {
         console.log("End condition met!");
         alert('Yay! 🎉')
+        onFinish({
+          final_steps: world.agent.stepsRemaining,
+        })
         // e.g. jsPsych.finishTrial({ inventory: world.agent.inventory.snapshot() });
       }
     };
