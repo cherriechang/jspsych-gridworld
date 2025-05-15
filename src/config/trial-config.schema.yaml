@@ -22,14 +22,14 @@ properties:
           type: integer
         minItems: 2
         maxItems: 2
-      total_steps:
+      max_steps:
         type: integer
-        default: 0
+        default: 100
 
   items:
     type: object
     patternProperties:
-      "^[A-Za-z0-9_]+$":
+      "^[A-Za-z0-9_]+$": # anything that matches this regex is a valid item name and has to validate against this section
         type: object
         required: [blocks, collects, unique, locations, visual]
         properties:
@@ -96,6 +96,18 @@ definitions:
           less_than:
             $ref: "#/definitions/predicate"
 
+      - type: object
+        required: [for_all]
+        properties:
+          for_all:
+            $ref: "#/definitions/predicateArray"
+
+      - type: object
+        required: [for_any]
+        properties:
+          for_any:
+            $ref: "#/definitions/predicateArray"
+
   predicate:
     type: object
     required: [property, value]
@@ -108,3 +120,14 @@ definitions:
           - type: boolean
           - type: array
             items: { type: integer }
+
+  predicateArray:
+    type: object
+    required: [property, condition]
+    properties:
+      property:
+        type: string
+        description: "Path to a property whose value is expected to be an array of objects."
+      condition:
+        $ref: "#/definitions/condition"
+

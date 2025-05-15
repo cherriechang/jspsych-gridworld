@@ -10,16 +10,16 @@ items:
     collects: false
     unique: true
     locations:
-      [2, 3]: 2
+      [2, 3]: 1
       [4, 6]: 1
-      [1, 9]: 2
+      [1, 9]: 1
     visual:
       color: "#0000ff"
 
 end_condition:
-  for_all:
+  for_any:
     property: player.visit_tile.Flag
-    condition: 
-      greater_than:
+    condition:
+      less_than:
         property: locations
         value: 1
