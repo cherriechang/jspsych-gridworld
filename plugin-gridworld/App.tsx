@@ -1,9 +1,9 @@
 import React from "react";
-import { useTrial } from "./hooks/useTrial";
-import { GridView } from "./components/GridView";
-import { InventoryView } from "./components/InventoryView";
-import { StepsRemainingView } from "./components/StepsRemainingView";
-import { EndConditionView } from "./components/EndConditionView";
+import { useTrial } from "./src/hooks/useTrial";
+import { GridView } from "./src/components/GridView";
+import { InventoryView } from "./src/components/InventoryView";
+import { StepsRemainingView } from "./src/components/StepsRemainingView";
+import { EndConditionView } from "./src/components/EndConditionView";
 import {
   trial1config,
   trial2config,
@@ -11,7 +11,7 @@ import {
   trial4config,
   trial5config,
   trial6config,
-} from "./config/trialYaml";
+} from "./src/config/trialYaml";
 import "./index.css";
 
 export default function App() {

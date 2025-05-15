@@ -24,5 +24,6 @@
     "noUncheckedSideEffectImports": true,
     "composite": true
   },
-  "include": ["src", "plugin-gridworld/src/config", "plugin-gridworld/src/core", "plugin-gridworld/src/hooks", "plugin-gridworld/src/trial-config-validator.js", "plugin-gridworld/src/main.tsx"]
+  "include": [
+    "src/**/*", "App.tsx"]
 }
