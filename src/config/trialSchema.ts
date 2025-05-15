@@ -23,9 +23,9 @@ properties:
           type: integer
         minItems: 2
         maxItems: 2
-      max_steps:
+      total_steps:
         type: integer
-        default: 100
+        default: 0
 
   items:
     type: object
@@ -47,6 +47,7 @@ properties:
                 type: integer
           visual:
             type: object
+            required: [color]
             properties:
               color:
                 type: string
@@ -57,6 +58,7 @@ properties:
 definitions:
   condition:
     oneOf:
+      # Logical combinators
       - type: object
         required: [and]
         properties:
@@ -79,6 +81,7 @@ definitions:
           not:
             $ref: "#/definitions/condition"
 
+      # Atomic predicates
       - type: object
         required: [equals]
         properties:
@@ -97,17 +100,18 @@ definitions:
           less_than:
             $ref: "#/definitions/predicate"
 
+      # Quantifiers
       - type: object
         required: [for_all]
         properties:
           for_all:
-            $ref: "#/definitions/predicateArray"
+            $ref: "#/definitions/quantifier"
 
       - type: object
         required: [for_any]
         properties:
           for_any:
-            $ref: "#/definitions/predicateArray"
+            $ref: "#/definitions/quantifier"
 
   predicate:
     type: object
@@ -122,13 +126,16 @@ definitions:
           - type: array
             items: { type: integer }
 
-  predicateArray:
+  quantifier:
     type: object
-    required: [property, condition]
+    required: [over, equals]
     properties:
-      property:
+      over:
         type: string
-        description: "Path to a property whose value is expected to be an array of objects."
-      condition:
-        $ref: "#/definitions/condition"
+      equals:
+        oneOf:
+          - type: integer
+          - type: boolean
+          - type: array
+            items: { type: integer }
 `;
