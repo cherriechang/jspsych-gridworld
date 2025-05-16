@@ -15,6 +15,7 @@ export function useTrial(config: string, onFinish: (data: any) => void) {
   console.log("👣 useTrial initialized");
 
   const worldRef = useRef<GridWorld | null>(null);
+  const [world, setWorld] = useState<GridWorld | null>(null);
   const evaluatorRef = useRef<RuleEvaluator | null>(null);
   const [, setTick] = useState(0);
 
@@ -25,10 +26,11 @@ export function useTrial(config: string, onFinish: (data: any) => void) {
 
 
     // 1) compile world
-    const world = GameCompiler.compile(trial);
+    const compiledWorld = GameCompiler.compile(trial);
     const evaluator = new RuleEvaluator(trial.end_condition);
 
-    worldRef.current = world;
+    worldRef.current = compiledWorld;
+    setWorld(compiledWorld);
     evaluatorRef.current = evaluator;
 
     // 2) key handlers
@@ -40,14 +42,17 @@ export function useTrial(config: string, onFinish: (data: any) => void) {
     };
 
     const handleKey = (e: KeyboardEvent) => {
-      if (!worldRef.current || !evaluatorRef.current) return;
+      if (!worldRef.current || !evaluatorRef.current) {
+        console.log("World not initialized yet", worldRef.current, evaluatorRef.current);
+        return;
+      }
 
-      const world = worldRef.current;
+      const currentWorld = worldRef.current;
       const evaluator = evaluatorRef.current;
 
       if (e.key.startsWith("Arrow")) {
         e.preventDefault();
-        if (world.move(dirs[e.key])) {
+        if (currentWorld.move(dirs[e.key])) {
           setTick((t) => {
             console.log("🔄 Triggering re-render, tick =", t + 1);
             return t + 1;
@@ -56,11 +61,11 @@ export function useTrial(config: string, onFinish: (data: any) => void) {
       } else if (e.key === " ") {
         // collect first matching collectible on tile
         const tile =
-          world.tiles[world.agent.position.y][world.agent.position.x];
+          currentWorld.tiles[currentWorld.agent.position.y][currentWorld.agent.position.x];
         for (let id of tile.getInstances()) {
-          const cat = world.instances[id].category.def;
+          const cat = currentWorld.instances[id].category.def;
           if (cat.collects) {
-            world.collect(cat.name);
+            currentWorld.collect(cat.name);
             setTick((t) => {
               console.log("🔄 Triggering re-render, tick =", t + 1);
               return t + 1;
@@ -72,9 +77,9 @@ export function useTrial(config: string, onFinish: (data: any) => void) {
       }
 
       // check end condition
-      if (evaluator.evaluate(world)) {
+      if (evaluator.evaluate(currentWorld)) {
         console.log("End condition met!");
-        onFinish(world.agent.inventory); // TODO: make this legit
+        onFinish(currentWorld.agent.inventory); // TODO: make this legit
       }
     };
 
@@ -82,5 +87,5 @@ export function useTrial(config: string, onFinish: (data: any) => void) {
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
 
-  return { world: worldRef.current };
+  return { world: world };
 }
