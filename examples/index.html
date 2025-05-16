@@ -1,3 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>jsPsychGridworld Simple Test</title>
+
+    <!-- First load React and ReactDOM -->
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/scheduler@0.23.0/umd/scheduler.production.min.js"></script>
+
+    <!-- Then load jsPsych -->
+    <script src="https://unpkg.com/jspsych@7.3.3/dist/index.browser.js"></script>
+
+    <!-- Load our plugin last -->
+    <script src="../dist/index.browser.js"></script>
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css"
+    />
+  </head>
+
+  <body>
+    <div id="grid-world"></div>
+  </body>
+  <script>
+    const jsPsych = initJsPsych({
+      display_element: "grid-world",
+    });
+
+    const config = `
 general:
   rows: 8
   cols: 16
@@ -71,3 +103,12 @@ end_condition:
         - greater_than:
             property: player.inventory.Orange
             value: 3
+`;
+
+    const trial = {
+      type: jsPsychGridworld,
+      configYaml: config,
+    };
+    jsPsych.run([trial]);
+  </script>
+</html>
