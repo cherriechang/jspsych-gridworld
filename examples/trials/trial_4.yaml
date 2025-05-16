@@ -1,0 +1,25 @@
+general:
+  rows: 8
+  cols: 12
+  start_location: [6, 4]
+  total_steps: 0
+
+items:
+  Flag:
+    blocks: false
+    collects: true
+    unique: true
+    locations:
+      [0, 1]: 1
+      [1, 6]: 1
+      [11, 0]: 1
+      [11, 7]: 1
+      [4, 6]: 1
+      [9, 1]: 1
+    visual:
+      color: "#0000ff"
+
+end_condition:
+  for_all:
+    over: player.visit_tile.Flag
+    equals: true
