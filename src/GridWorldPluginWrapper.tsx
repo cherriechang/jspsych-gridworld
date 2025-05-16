@@ -13,10 +13,6 @@ export function startGridWorldTrial(
   };
 
   ReactDOM.render(
-    // <div>
-    //   <h1>Gridworld Demo</h1>
-    //   <p>Loading...</p>
-    // </div>,
     <GridWorldApp configYaml={configYaml} onFinish={onFinish} />,
     display_element
   );
