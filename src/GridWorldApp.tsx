@@ -22,6 +22,9 @@ export default function GridWorldApp({
     console.log("loading...");
     return <div className="app-wrapper">Loading…</div>;
   }
+  else {
+    console.log("world loaded");
+  }
 
   return (
     <div className="app-wrapper">
