@@ -12,7 +12,6 @@ import { trialSchemaYaml } from "../utils/trialSchema";
  * @param config serialized trial config YAML
  */
 export function useTrial(config: string, onFinish: (data: any) => void) {
-  console.log("👣 useTrial initialized");
 
   const worldRef = useRef<GridWorld | null>(null);
   const [world, setWorld] = useState<GridWorld | null>(null);

@@ -4,10 +4,10 @@ import GridWorldApp from "../src/GridWorldApp";
 
 const config = `
 general:
-  rows: 5
-  cols: 5
-  start_location: [2, 2]
-  total_steps: 10
+  rows: 8
+  cols: 16
+  start_location: [4, 4]
+  total_steps: 100  # unlimited
 
 items:
   Apple:
@@ -15,14 +15,67 @@ items:
     collects: true
     unique: false
     locations:
-      [1, 1]: 1
+      [1, 2]: 1
+      [15, 3]: 3
+      [9, 0]: 2
     visual:
       color: "#ff0000"
 
+  Banana:
+    blocks: false
+    collects: true
+    unique: false
+    locations:
+      [5, 3]: 3
+      [10, 5]: 2
+    visual:
+      color: "#ffff00"
+
+  Orange:
+    blocks: false
+    collects: true
+    unique: false
+    locations:
+      [12, 7]: 1
+      [12, 6]: 1
+      [13, 7]: 1
+      [13, 6]: 1
+    visual:
+      color: "#ffa500"
+
+  Boulder:
+    blocks: true
+    collects: false
+    unique: true
+    locations:
+      [1, 1]: 1 
+      [2, 1]: 1 
+      [3, 2]: 1 
+      [5, 5]: 1 
+      [5, 6]: 1 
+      [5, 7]: 1 
+      [14, 1]: 1 
+      [13, 2]: 1 
+      [12, 3]: 1 
+      [11, 4]: 1
+    visual:
+      color: "#808080"
+
 end_condition:
-  equals:
-    property: player.steps_remaining
-    value: 0
+  or:
+    - equals:
+        property: player.steps_remaining
+        value: 0
+    - and:
+        - greater_than:
+            property: player.inventory.Apple
+            value: 3
+        - greater_than:
+            property: player.inventory.Banana
+            value: 2
+        - greater_than:
+            property: player.inventory.Orange
+            value: 3
 `;
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
